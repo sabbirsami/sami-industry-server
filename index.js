@@ -39,6 +39,13 @@ async function run() {
             const reviews = await reviewCollection.find(query).toArray();
             res.send(reviews);
         });
+
+        //TO POST REVIEW
+        app.post("/review", async (req, res) => {
+            const newReview = req.body;
+            const result = await reviewCollection.insertOne(newReview);
+            res.send(result);
+        });
     } finally {
     }
 }
