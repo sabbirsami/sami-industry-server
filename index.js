@@ -22,12 +22,22 @@ async function run() {
         const productCollection = client
             .db("samiIndustry")
             .collection("products");
+        const reviewCollection = client
+            .db("samiIndustry")
+            .collection("reviews");
 
         //TO GET ALL PRODUCT
         app.get("/product", async (req, res) => {
             const query = {};
             const products = await productCollection.find(query).toArray();
             res.send(products);
+        });
+
+        //TO GET ALL REVIEW
+        app.get("/review", async (req, res) => {
+            const query = {};
+            const reviews = await reviewCollection.find(query).toArray();
+            res.send(reviews);
         });
     } finally {
     }
