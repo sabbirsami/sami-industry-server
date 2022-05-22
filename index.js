@@ -22,14 +22,21 @@ async function run() {
         const productCollection = client
             .db("samiIndustry")
             .collection("products");
+
+        //TO GET ALL PRODUCT
+        app.get("/product", async (req, res) => {
+            const query = {};
+            const products = await productCollection.find(query).toArray();
+            res.send(products);
+        });
     } finally {
     }
 }
+run().catch(console.dir);
 
 app.get("/", (req, res) => {
     res.send("Sami Industry's server");
 });
-
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
