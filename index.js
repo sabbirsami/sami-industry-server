@@ -32,6 +32,12 @@ async function run() {
             const products = await productCollection.find(query).toArray();
             res.send(products);
         });
+        // TO ADD NEW PRODUCT
+        app.post("product", async (req, res) => {
+            const newProduct = req.body;
+            const result = await productCollection.insertOne(newProduct);
+            res.send(result);
+        });
 
         //TO GET ALL REVIEW
         app.get("/review", async (req, res) => {
