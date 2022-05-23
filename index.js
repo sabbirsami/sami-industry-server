@@ -16,6 +16,21 @@ const client = new MongoClient(uri, {
     serverApi: ServerApiVersion.v1,
 });
 
+function verifyJWT(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).send({ message: "Unauthorized access" });
+    }
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, process.env.WEB_TOKEN, function (err, decoded) {
+        if (err) {
+            return res.status(403).send({ message: "Forbidden access" });
+        }
+        req.decoded = decoded;
+        next();
+    });
+}
+
 async function run() {
     try {
         await client.connect();
@@ -27,6 +42,7 @@ async function run() {
             .collection("reviews");
         const userCollection = client.db("samiIndustry").collection("users");
 
+        // ADD USER FIRST TIME AFTER CREATE ACCOUNT
         app.put("/user/:email", async (req, res) => {
             const email = req.params.email;
             const user = req.body;
@@ -67,7 +83,7 @@ async function run() {
         });
 
         // DELETE SINGE PRODUCT
-        app.delete("/product/:id", async (req, res) => {
+        app.delete("/product/:id", verifyJWT, async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await productCollection.deleteOne(query);
