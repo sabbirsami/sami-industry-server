@@ -59,6 +59,18 @@ async function run() {
             const token = jwt.sign({ email: email }, process.env.WEB_TOKEN);
             res.send({ result, token });
         });
+        app.get("/user", async (req, res) => {
+            const query = {};
+            const user = await userCollection.find(query).toArray();
+            res.send(user);
+        });
+
+        app.delete("/user/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await userCollection.deleteOne(query);
+            res.send(result);
+        });
 
         //TO GET ALL PRODUCT
         app.get("/product", async (req, res) => {
@@ -83,7 +95,7 @@ async function run() {
         });
 
         // DELETE SINGE PRODUCT
-        app.delete("/product/:id", verifyJWT, async (req, res) => {
+        app.delete("/product/:id", async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await productCollection.deleteOne(query);
