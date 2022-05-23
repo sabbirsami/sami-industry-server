@@ -60,6 +60,7 @@ async function run() {
             res.send({ result, token });
         });
 
+        // MAKE ADMIN AND SET CONDITION SO THAT WITHOUT ADMIN NO ON MAKE ADMIN TO OTHER
         app.put("/user/admin/:email", verifyJWT, async (req, res) => {
             const email = req.params.email;
             const requester = req.decoded.email;
@@ -79,6 +80,12 @@ async function run() {
             } else {
                 res.status(403).send({ message: "Forbidden access" });
             }
+        });
+        app.get("/admin/:email", async (req, res) => {
+            const email = req.params.email;
+            const user = await userCollection.findOne({ email: email });
+            const isAdmin = user.role === "admin";
+            res.send({ admin: isAdmin });
         });
 
         app.get("/user", verifyJWT, async (req, res) => {
