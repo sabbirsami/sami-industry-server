@@ -25,6 +25,24 @@ async function run() {
         const reviewCollection = client
             .db("samiIndustry")
             .collection("reviews");
+        const userCollection = client.db("samiIndustry").collection("users");
+
+        app.put("/user/:email", async (req, res) => {
+            const email = req.params.email;
+            const user = req.body;
+            const filter = { email: email };
+            const option = { upsert: true };
+            const updateDoc = {
+                $set: user,
+            };
+            const result = await userCollection.updateOne(
+                filter,
+                updateDoc,
+                option
+            );
+            const token = jwt.sign({ email: email }, process.env.WEB_TOKEN);
+            res.send({ result, token });
+        });
 
         //TO GET ALL PRODUCT
         app.get("/product", async (req, res) => {
@@ -32,18 +50,23 @@ async function run() {
             const products = await productCollection.find(query).toArray();
             res.send(products);
         });
+
         // TO ADD NEW PRODUCT
         app.post("/product", async (req, res) => {
             const newProduct = req.body;
             const result = await productCollection.insertOne(newProduct);
             res.send(result);
         });
+
+        //GET SINGLE PRODUCT INFO
         app.get("/product/:id", async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await productCollection.findOne(query);
             res.send(result);
         });
+
+        // DELETE SINGE PRODUCT
         app.delete("/product/:id", async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
