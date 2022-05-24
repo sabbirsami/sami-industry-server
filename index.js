@@ -101,10 +101,15 @@ async function run() {
             res.send(result);
         });
 
+        // POST ORDER FROM CLIENT SITE
         app.post("/order", async (req, res) => {
             const newOrder = req.body;
             const result = await orderCollection.insertOne(newOrder);
             res.send(result);
+        });
+        app.get("/order", async (req, res) => {
+            const order = await orderCollection.find().toArray();
+            res.send(order);
         });
 
         //TO GET ALL PRODUCT
