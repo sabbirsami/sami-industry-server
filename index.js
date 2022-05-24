@@ -109,15 +109,17 @@ async function run() {
         });
         app.get("/order", async (req, res) => {
             const userEmail = req.query.email;
-            console.log(userEmail);
             const query = { userEmail: userEmail };
             const orders = await orderCollection.find(query).toArray();
             res.send(orders);
         });
-        // app.get("/order", async (req, res) => {
-        //     const order = await orderCollection.find().toArray();
-        //     res.send(order);
-        // });
+        app.get("/order/:paymentId", async (req, res) => {
+            const paymentId = req.params.paymentId;
+            const query = { _id: ObjectId(paymentId) };
+            const orders = await orderCollection.findOne(query);
+            res.send(orders);
+        });
+
         app.delete("/order/:id", verifyJWT, async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
