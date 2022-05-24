@@ -111,6 +111,12 @@ async function run() {
             const order = await orderCollection.find().toArray();
             res.send(order);
         });
+        app.delete("/order/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await orderCollection.deleteOne(query);
+            res.send(result);
+        });
 
         //TO GET ALL PRODUCT
         app.get("/product", async (req, res) => {
