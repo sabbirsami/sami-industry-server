@@ -41,6 +41,7 @@ async function run() {
             .db("samiIndustry")
             .collection("reviews");
         const userCollection = client.db("samiIndustry").collection("users");
+        const orderCollection = client.db("samiIndustry").collection("orders");
 
         // ADD USER FIRST TIME AFTER CREATE ACCOUNT
         app.put("/user/:email", async (req, res) => {
@@ -100,6 +101,12 @@ async function run() {
             res.send(result);
         });
 
+        app.post("/order", async (req, res) => {
+            const newOrder = req.body;
+            const result = await orderCollection.insertOne(newOrder);
+            res.send(result);
+        });
+
         //TO GET ALL PRODUCT
         app.get("/product", async (req, res) => {
             const query = {};
@@ -144,7 +151,7 @@ async function run() {
             res.send(result);
         });
 
-        app.delete("/review/:id", async (req, res) => {
+        app.delete("/review/:id", verifyJWT, async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await reviewCollection.deleteOne(query);
