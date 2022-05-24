@@ -3,6 +3,7 @@ const app = express();
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.4vlxs.mongodb.net/?retryWrites=true&w=majority`;
@@ -59,6 +60,16 @@ async function run() {
             );
             const token = jwt.sign({ email: email }, process.env.WEB_TOKEN);
             res.send({ result, token });
+        });
+        app.post("/create-payment-intent", verifyJWT, async (req, res) => {
+            const { price } = req.body;
+            const amount = price * 100;
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: amount,
+                currency: "usd",
+                payment_method_types: ["card"],
+            });
+            res.send({ clientSecret: paymentIntent.client_secret });
         });
 
         // MAKE ADMIN AND SET CONDITION SO THAT WITHOUT ADMIN NO ON MAKE ADMIN TO OTHER
