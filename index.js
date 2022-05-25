@@ -43,6 +43,9 @@ async function run() {
             .collection("reviews");
         const userCollection = client.db("samiIndustry").collection("users");
         const orderCollection = client.db("samiIndustry").collection("orders");
+        const paymentCollection = client
+            .db("samiIndustry")
+            .collection("payments");
 
         // ADD USER FIRST TIME AFTER CREATE ACCOUNT
         app.put("/user/:email", async (req, res) => {
@@ -61,9 +64,10 @@ async function run() {
             const token = jwt.sign({ email: email }, process.env.WEB_TOKEN);
             res.send({ result, token });
         });
-        app.post("/create-payment-intent", verifyJWT, async (req, res) => {
+        app.post("/create-payment-intent", async (req, res) => {
             const { price } = req.body;
             const amount = price * 100;
+            console.log(amount);
             const paymentIntent = await stripe.paymentIntents.create({
                 amount: amount,
                 currency: "usd",
@@ -129,6 +133,23 @@ async function run() {
             const query = { _id: ObjectId(paymentId) };
             const orders = await orderCollection.findOne(query);
             res.send(orders);
+        });
+        app.patch("/order/:id", verifyJWT, async (req, res) => {
+            const id = req.params.id;
+            const payment = req.body;
+            const filter = { _id: ObjectId(id) };
+            const updatedDoc = {
+                $set: {
+                    paid: true,
+                    transactionId: payment.transactionId,
+                },
+            };
+            const result = await paymentCollection.insertOne(payment);
+            const updatedOrder = await orderCollection.updateOne(
+                filter,
+                updatedDoc
+            );
+            res.send(updatedOrder);
         });
 
         app.delete("/order/:id", verifyJWT, async (req, res) => {
