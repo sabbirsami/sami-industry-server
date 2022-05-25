@@ -64,7 +64,7 @@ async function run() {
             const token = jwt.sign({ email: email }, process.env.WEB_TOKEN);
             res.send({ result, token });
         });
-        app.post("/create-payment-intent", async (req, res) => {
+        app.post("/create-payment-intent", verifyJWT, async (req, res) => {
             const { price } = req.body;
             const amount = price * 100;
             console.log(amount);
@@ -122,7 +122,7 @@ async function run() {
             const result = await orderCollection.insertOne(newOrder);
             res.send(result);
         });
-        app.get("/order", async (req, res) => {
+        app.get("/order", verifyJWT, async (req, res) => {
             const userEmail = req.query.email;
             const query = { userEmail: userEmail };
             const orders = await orderCollection.find(query).toArray();
