@@ -65,8 +65,8 @@ async function run() {
             res.send({ result, token });
         });
         app.post("/create-payment-intent", verifyJWT, async (req, res) => {
-            const { price } = req.body;
-            const amount = price * 100;
+            const { paymentPrice } = req.body;
+            const amount = paymentPrice * 100;
             console.log(amount);
             const paymentIntent = await stripe.paymentIntents.create({
                 amount: amount,
@@ -122,6 +122,18 @@ async function run() {
             const result = await orderCollection.insertOne(newOrder);
             res.send(result);
         });
+        app.get("/orders", async (req, res) => {
+            const result = await orderCollection.find().toArray();
+            res.send(result);
+        });
+
+        app.delete("/orders/:id", verifyJWT, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await orderCollection.deleteOne(query);
+            res.send(result);
+        });
+
         app.get("/order", verifyJWT, async (req, res) => {
             const userEmail = req.query.email;
             const query = { userEmail: userEmail };
