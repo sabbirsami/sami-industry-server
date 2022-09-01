@@ -8,6 +8,7 @@ const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const dbConnect = require("./utils/dbConnect");
 const viewCount = require("./middleware/viewCount");
+const { default: rateLimit } = require("express-rate-limit");
 
 app.use(cors());
 app.use(express.json());
@@ -15,6 +16,16 @@ app.use(express.json());
 app.use(viewCount);
 
 dbConnect();
+
+const limiter = rateLimitt({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+// Apply the rate limiting middleware to all requests
+app.use(limiter);
 
 function verifyJWT(req, res, next) {
     const authHeader = req.headers.authorization;
