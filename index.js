@@ -246,3 +246,10 @@ app.use(errorHandler);
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
+
+process.on("unhandledRejection", (error) => {
+    console.log(error.name, error.message);
+    app.close(() => {
+        process.exit(1);
+    });
+});
