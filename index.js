@@ -9,6 +9,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const dbConnect = require("./utils/dbConnect");
 const viewCount = require("./middleware/viewCount");
 const { default: rateLimit } = require("express-rate-limit");
+const errorHandler = require("./middleware/errorHandler");
 
 app.use(cors());
 app.use(express.json());
@@ -239,6 +240,9 @@ run().catch(console.dir);
 app.get("/", (req, res) => {
     res.send("Sami Industry's server");
 });
+
+app.use(errorHandler);
+
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
