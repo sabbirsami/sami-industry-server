@@ -13,13 +13,12 @@ const errorHandler = require("./middleware/errorHandler");
 const productRoutes = require("./routes/v1/products.route");
 
 app.use(cors());
-app.use("/products", productRoutes);
 app.use(express.json());
-
 app.use(viewCount);
 
 dbConnect();
 
+app.use("/api/v1/products", productRoutes);
 const limiter = rateLimitt({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 2, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
