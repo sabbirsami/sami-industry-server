@@ -249,6 +249,10 @@ app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
 
+app.all("*", (req, res) => {
+    res.send("No route found");
+});
+
 process.on("unhandledRejection", (error) => {
     console.log(error.name, error.message);
     app.close(() => {
