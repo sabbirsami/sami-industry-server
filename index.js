@@ -10,8 +10,10 @@ const dbConnect = require("./utils/dbConnect");
 const viewCount = require("./middleware/viewCount");
 const { default: rateLimit } = require("express-rate-limit");
 const errorHandler = require("./middleware/errorHandler");
+const productRoutes = require("./routes/v1/products.route");
 
 app.use(cors());
+app.use("/products", productRoutes);
 app.use(express.json());
 
 app.use(viewCount);
