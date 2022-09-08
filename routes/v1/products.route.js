@@ -19,6 +19,7 @@ router
      * @apiError (Forbidden 403)     Forbidden     Only admins can access the data
      **/
     .get((req, res) => {
+        console.log(res);
         res.send("products found");
     })
     /**
