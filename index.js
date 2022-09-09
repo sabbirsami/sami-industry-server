@@ -11,12 +11,21 @@ const viewCount = require("./middleware/viewCount");
 const { default: rateLimit } = require("express-rate-limit");
 const errorHandler = require("./middleware/errorHandler");
 const productRoutes = require("./routes/v1/products.route");
+const { connectToServer } = require("./utils/dbConnect");
 
 app.use(cors());
 app.use(express.json());
 app.use(viewCount);
 
-dbConnect();
+connectToServer((err) => {
+    if (!err) {
+        app.listen(port, () => {
+            console.log(`listening on port ${port}`);
+        });
+    } else {
+        console.log(err);
+    }
+});
 
 app.use("/api/v1/products", productRoutes);
 const limiter = rateLimitt({
@@ -243,10 +252,6 @@ app.get("/", (req, res) => {
 });
 
 app.use(errorHandler);
-
-app.listen(port, () => {
-    console.log(`listening on port ${port}`);
-});
 
 app.all("*", (req, res) => {
     res.send("No route found");
