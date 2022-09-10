@@ -1,9 +1,21 @@
-module.exports.saveATool = async (req, res, next) => {
+const { getDb } = require("../../utils/dbConnect");
+
+module.exports.getAllProduct = async (req, res, next) => {
     try {
         const db = getDb();
-        const tool = req.body;
+        const product = await db.collection("products").find().toArray();
+        res.status(200).json({ success: true, data: product });
+    } catch (error) {
+        next(error);
+    }
+};
 
-        const result = await db.collection("tools").insertOne(tool);
+module.exports.saveAProduct = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const product = req.body;
+
+        const result = await db.collection("products").insertOne(product);
         console.log(result);
 
         if (!result.insertedId) {

@@ -1,5 +1,5 @@
 const express = require("express");
-const { saveATool } = require("../controllers/products.controllers");
+const { saveAProduct } = require("../controllers/products.controllers");
 const router = express.Router();
 
 router
@@ -38,6 +38,6 @@ router
      * @apiError (Unauthorized 401)  Unauthorized  Only authenticated users can access the data
      * @apiError (Forbidden 403)     Forbidden     Only admins can access the data
      **/
-    .post(saveATool);
+    .post(saveAProduc);
 
 module.exports = router;
