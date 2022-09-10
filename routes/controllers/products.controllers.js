@@ -61,19 +61,45 @@ module.exports.updateProduct = async (req, res, next) => {
         if (!ObjectId.isValid(id)) {
             return res
                 .status(400)
-                .json({ success: false, error: "Not a valid tool id." });
+                .json({ success: false, error: "Not a valid product id." });
         }
-        const tool = await db
-            .collection("tools")
+        const product = await db
+            .collection("products")
             .updateOne({ _id: ObjectId(id) }, { $set: req.body });
-        if (!tool.modifiedCount) {
+        if (!product.modifiedCount) {
             return res
                 .status(400)
-                .json({ success: false, error: "Couldn't update the tool" });
+                .json({ success: false, error: "Couldn't update the product" });
         }
         res.status(200).json({
             success: true,
-            message: "Successfully updated the tool",
+            message: "Successfully updated the product",
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.deleteProduct = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const { id } = req.params;
+        if (!ObjectId.isValid(id)) {
+            return res
+                .status(400)
+                .json({ success: false, error: "Not a valid product id." });
+        }
+        const product = await db
+            .collection("products")
+            .deleteOne({ _id: ObjectId(id) });
+        if (!product.deletedCount) {
+            return res
+                .status(400)
+                .json({ success: false, error: "Couldn't delete the product" });
+        }
+        res.status(200).json({
+            success: true,
+            message: "Successfully deleted the product",
         });
     } catch (error) {
         next(error);
