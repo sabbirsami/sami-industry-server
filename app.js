@@ -32,7 +32,7 @@ const productSchema = mongoose.Schema(
             type: String,
             required: true,
             enum: {
-                value: ["kg", "litre", "pcs"],
+                values: ["kg", "litre", "pcs"],
                 message: "Unit value can't be {VALUE} must be kg/litre/pcs",
             },
         },
@@ -56,7 +56,7 @@ const productSchema = mongoose.Schema(
             type: String,
             required: true,
             enum: {
-                value: ["in-stock", "out-of-stock", "discontinued"],
+                values: ["in-stock", "out-of-stock", "discontinued"],
                 message: "status can't be {VALUE}",
             },
         },
@@ -73,6 +73,9 @@ const productSchema = mongoose.Schema(
         timestamps: true,
     }
 );
+
+// SCHEMA -> MODEL -> QUERY
+const Product = mongoose.model("Product", productSchema); // Model name first word must be uppercase
 
 app.get("/", (req, res) => {
     res.send("Route is working! YeY");
