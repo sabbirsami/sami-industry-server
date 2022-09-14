@@ -74,6 +74,20 @@ const productSchema = mongoose.Schema(
     }
 );
 
+// Mongoose middleware for saving data : pre/ post
+
+productSchema.pre("save", function (next) {
+    console.log("Before saving data");
+    if (this.quantity === 0) {
+        this.status = "out-of-stock";
+    }
+    next();
+});
+productSchema.post("save", function (doc, next) {
+    console.log("Before saving data");
+    next();
+});
+
 // SCHEMA -> MODEL -> QUERY
 const Product = mongoose.model("Product", productSchema); // Model name first word must be uppercase
 
