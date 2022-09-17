@@ -1,4 +1,5 @@
 const express = require("express");
+const { updateAProduct } = require("../../controllers/products.controllers");
 const { saveAProduct } = require("../controllers/products.controllers");
 const router = express.Router();
 
@@ -38,6 +39,7 @@ router
      * @apiError (Unauthorized 401)  Unauthorized  Only authenticated users can access the data
      * @apiError (Forbidden 403)     Forbidden     Only admins can access the data
      **/
-    .post(saveAProduc);
+    .post(saveAProduct);
 
+router.route("/:id").patch(updateAProduct);
 module.exports = router;

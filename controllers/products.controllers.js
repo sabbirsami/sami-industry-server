@@ -1,4 +1,4 @@
-const { getDb } = require("../../utils/dbConnect");
+const { getDb } = require("../utils/dbConnect");
 
 module.exports.getAllProduct = async (req, res, next) => {
     try {
@@ -120,4 +120,24 @@ module.exports.testGet = async (req, res, next) => {
         .find({ name: "test 99999" })
         .toArray();
     res.json(result);
+};
+
+// MONGOOSE
+
+exports.updateAProduct = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const result = await Product.updateOne(
+            { _id: id },
+            { $set: req.body },
+            {
+                runValidators: true,
+            }
+        );
+    } catch (error) {
+        res.status(400).json({
+            status: "Fail",
+            error: error.message,
+        });
+    }
 };

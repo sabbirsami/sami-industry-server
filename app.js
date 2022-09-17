@@ -47,4 +47,6 @@ app.get("/api/product", async (req, res, next) => {
     }
 });
 
+app.use("/api/product", productRoute);
+
 module.exports = app;
