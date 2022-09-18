@@ -1,6 +1,9 @@
 const express = require("express");
-const { updateAProduct } = require("../../controllers/products.controllers");
-const { saveAProduct } = require("../controllers/products.controllers");
+const {
+    updateAProduct,
+    bulkUpdateProduct,
+    saveAProduct,
+} = require("../../controllers/products.controllers");
 const router = express.Router();
 
 router
@@ -41,5 +44,6 @@ router
      **/
     .post(saveAProduct);
 
+router.route("/bulk-update").patch(bulkUpdateProduct);
 router.route("/:id").patch(updateAProduct);
 module.exports = router;

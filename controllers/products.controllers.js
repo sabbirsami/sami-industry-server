@@ -1,3 +1,4 @@
+const { bulkUpdateProductService } = require("../services/product.services");
 const { getDb } = require("../utils/dbConnect");
 
 module.exports.getAllProduct = async (req, res, next) => {
@@ -134,6 +135,16 @@ exports.updateAProduct = async (req, res, next) => {
                 runValidators: true,
             }
         );
+    } catch (error) {
+        res.status(400).json({
+            status: "Fail",
+            error: error.message,
+        });
+    }
+};
+exports.bulkUpdateProduct = async (req, res, next) => {
+    try {
+        const result = await bulkUpdateProductService(req.body);
     } catch (error) {
         res.status(400).json({
             status: "Fail",
