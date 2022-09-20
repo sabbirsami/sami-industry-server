@@ -1,4 +1,9 @@
-const { bulkUpdateProductService } = require("../services/product.services");
+const {
+    bulkUpdateProductService,
+    deleteProductByIdService,
+    getProductByIdService,
+    getProductByService,
+} = require("../services/product.services");
 const { getDb } = require("../utils/dbConnect");
 
 module.exports.getAllProduct = async (req, res, next) => {
@@ -125,6 +130,20 @@ module.exports.testGet = async (req, res, next) => {
 
 // MONGOOSE
 
+exports.getProducts = async (req, res, next) => {
+    try {
+        const queryObject = { ...req.body };
+        const excludeFields = ["sort", "page", "limit"];
+        excludeFields.forEach((field) => delete queryObject[field]);
+        const products = await getProductByService(queryObject);
+    } catch (error) {
+        res.status(400).json({
+            status: "Fail",
+            error: error.message,
+        });
+    }
+};
+
 exports.updateAProduct = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -135,6 +154,10 @@ exports.updateAProduct = async (req, res, next) => {
                 runValidators: true,
             }
         );
+        res.status(200).json({
+            success: true,
+            message: "Successfully deleted the product",
+        });
     } catch (error) {
         res.status(400).json({
             status: "Fail",
@@ -145,6 +168,26 @@ exports.updateAProduct = async (req, res, next) => {
 exports.bulkUpdateProduct = async (req, res, next) => {
     try {
         const result = await bulkUpdateProductService(req.body);
+        res.status(200).json({
+            success: true,
+            message: "Successfully updated all product",
+        });
+    } catch (error) {
+        res.status(400).json({
+            status: "Fail",
+            error: error.message,
+        });
+    }
+};
+exports.deleteProductById = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const result = await deleteProductByIdService(id);
+        res.status(200).json({
+            success: true,
+            message: "Successfully deleted the product",
+        });
     } catch (error) {
         res.status(400).json({
             status: "Fail",

@@ -3,9 +3,11 @@ const {
     updateAProduct,
     bulkUpdateProduct,
     saveAProduct,
+    deleteProductById,
 } = require("../../controllers/products.controllers");
 const router = express.Router();
 
+router.route("/bulk-update").patch(bulkUpdateProduct);
 router
     .route("/")
     /**
@@ -44,6 +46,5 @@ router
      **/
     .post(saveAProduct);
 
-router.route("/bulk-update").patch(bulkUpdateProduct);
-router.route("/:id").patch(updateAProduct);
+router.route("/:id").patch(updateAProduct).delete(deleteProductById);
 module.exports = router;
