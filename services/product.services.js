@@ -8,7 +8,9 @@ exports.deleteProductByIdService = async (id) => {
     const result = await Product.deleteOne({ _id: id });
     return result;
 };
-exports.getProductByService = async (query) => {
-    const result = await Product.find(query);
+exports.getProductByService = async (filters, queries) => {
+    const result = await Product.find({})
+        .select(queries.fieldsBy)
+        .sort(queries.sortBy);
     return result;
 };

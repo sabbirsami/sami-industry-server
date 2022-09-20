@@ -132,10 +132,26 @@ module.exports.testGet = async (req, res, next) => {
 
 exports.getProducts = async (req, res, next) => {
     try {
-        const queryObject = { ...req.body };
+        const filters = { ...req.body };
         const excludeFields = ["sort", "page", "limit"];
-        excludeFields.forEach((field) => delete queryObject[field]);
-        const products = await getProductByService(queryObject);
+        excludeFields.forEach((field) => delete filters[field]);
+
+        const queries = {};
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(",").join(" ");
+            queries.sortBy = sortBy;
+        }
+        if (req.query.fields) {
+            const fields = req.query.fields.split(",").join(" ");
+            queries.fieldsBy = fields;
+        }
+        const products = await getProductByService(filters, queries);
+
+        res.status(200).json({
+            success: true,
+            message: "Successfully deleted the product",
+            data: products,
+        });
     } catch (error) {
         res.status(400).json({
             status: "Fail",
