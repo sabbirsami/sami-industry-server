@@ -2,10 +2,10 @@
     "name": "sami-industry-server",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "app.js",
     "scripts": {
-        "start": "node index.js",
-        "start-dev": "nodemon index.js",
+        "start": "node app.js",
+        "start-dev": "nodemon app.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
@@ -17,8 +17,9 @@
         "express": "^4.18.1",
         "express-rate-limit": "^6.5.2",
         "jsonwebtoken": "^8.5.1",
-        "mongodb": "^4.6.0",
+        "mongoose": "^8.0.2",
         "nodemon": "^2.0.16",
-        "stripe": "^9.4.0"
+        "stripe": "^9.4.0",
+        "vercel": "^32.5.0"
     }
 }
