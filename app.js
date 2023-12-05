@@ -8,6 +8,7 @@ const {
     getSingleProduct,
 } = require("./src/router/productHandler");
 const { getAllReviews } = require("./src/router/reviewHandler");
+const { getAllOrders, postAOrder } = require("./src/router/orderHandler");
 
 // MIDDLEWARE
 applyMiddleware(app);
@@ -21,6 +22,11 @@ app.get("/product/:id", getSingleProduct);
 app.get("/reviews", getAllReviews);
 // GET A SINGLE REVIEWS
 app.get("/reviews", getAllReviews);
+
+// GET ALL ORDERS
+app.get("/orders", getAllOrders);
+// POST A ORDER INFO
+app.post("/orders", postAOrder);
 //APPLICATION ROUTE
 
 app.get("/", (req, res) => {
