@@ -12,6 +12,7 @@ const {
     getAllOrders,
     postAOrder,
     getUserOrders,
+    deleteUserOrder,
 } = require("./src/router/orderHandler");
 const { getAllUsers } = require("./src/router/userHandler");
 
@@ -30,6 +31,8 @@ app.get("/reviews", getAllReviews);
 
 // GET ALL ORDERS
 app.get("/orders", getAllOrders);
+// DELETE A USER ORDER
+app.delete("/orders/delete-order/:id", deleteUserOrder);
 // POST A ORDER INFO
 app.post("/orders", postAOrder);
 // GET A USER ORDERS INFO
