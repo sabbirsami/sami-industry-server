@@ -5,8 +5,8 @@ const applyMiddleware = (app) => {
     app.use(
         cors({
             origin: [
-                "http://localhost:5173",
-                "https://sami-industry.web.app/",
+                "http://localhost:3000",
+                "https://sami-industry.web.app",
                 "https://sami-industry.firebaseapp.com",
             ],
         })
