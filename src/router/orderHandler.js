@@ -8,6 +8,16 @@ module.exports.getAllOrders = async (req, res) => {
         console.log("Fail to get all orders", error);
     }
 };
+module.exports.getUserOrders = async (req, res) => {
+    try {
+        const email = req.params.email;
+        console.log(email);
+        const result = await Orders.find({ userEmail: email });
+        res.send(result);
+    } catch (error) {
+        console.log("Fail to user orders", error);
+    }
+};
 module.exports.postAOrder = async (req, res) => {
     try {
         const newOrder = new Orders(req.body);
